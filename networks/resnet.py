@@ -2,10 +2,8 @@ import torch.nn as nn
 import math
 import torch.utils.model_zoo as model_zoo
 
-
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152']
-
 
 model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
@@ -67,7 +65,7 @@ class Bottleneck(nn.Module):
         self.conv3 = nn.Conv2d(planes, planes * 4, kernel_size=1, bias=False)
         self.bn3 = nn.BatchNorm2d(planes * 4)
         self.relu = nn.ReLU(inplace=True)
-        self.downsample = downsample 
+        self.downsample = downsample
         self.stride = stride
 
     def forward(self, x):
@@ -198,7 +196,7 @@ def resnet50(pretrained=False, **kwargs):
             if k not in state_dict:
                 continue
             state_dict[k] = v
-        print('successfully load '+str(len(state_dict.keys()))+' keys')
+        print('successfully load ' + str(len(state_dict.keys())) + ' keys')
         model.load_state_dict(state_dict)
     return model
 
@@ -218,7 +216,7 @@ def resnet101(pretrained=False, **kwargs):
             if k not in state_dict:
                 continue
             state_dict[k] = v
-        print('successfully load '+str(len(state_dict.keys()))+' keys')
+        print('successfully load ' + str(len(state_dict.keys())) + ' keys')
         model.load_state_dict(state_dict)
     return model
 

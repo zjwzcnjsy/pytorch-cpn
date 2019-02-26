@@ -6,6 +6,7 @@ from .refineNet import refineNet
 
 __all__ = ['CPN50', 'CPN101']
 
+
 class CPN(nn.Module):
     def __init__(self, resnet, output_shape, num_class, pretrained=True):
         super(CPN, self).__init__()
@@ -21,12 +22,14 @@ class CPN(nn.Module):
 
         return global_outs, refine_out
 
-def CPN50(out_size,num_class,pretrained=True):
+
+def CPN50(out_size, num_class, pretrained=True):
     res50 = resnet50(pretrained=pretrained)
-    model = CPN(res50, output_shape=out_size,num_class=num_class, pretrained=pretrained)
+    model = CPN(res50, output_shape=out_size, num_class=num_class, pretrained=pretrained)
     return model
 
-def CPN101(out_size,num_class,pretrained=True):
+
+def CPN101(out_size, num_class, pretrained=True):
     res101 = resnet101(pretrained=pretrained)
-    model = CPN(res101, output_shape=out_size,num_class=num_class, pretrained=pretrained)
+    model = CPN(res101, output_shape=out_size, num_class=num_class, pretrained=pretrained)
     return model

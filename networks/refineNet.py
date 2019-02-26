@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch
 
+
 class Bottleneck(nn.Module):
     expansion = 4
 
@@ -16,11 +17,11 @@ class Bottleneck(nn.Module):
         self.relu = nn.ReLU(inplace=True)
 
         self.downsample = nn.Sequential(
-                nn.Conv2d(inplanes, planes * 2,
-                          kernel_size=1, stride=stride, bias=False),
-                nn.BatchNorm2d(planes * 2),
-            )
- 
+            nn.Conv2d(inplanes, planes * 2,
+                      kernel_size=1, stride=stride, bias=False),
+            nn.BatchNorm2d(planes * 2),
+        )
+
         self.stride = stride
 
     def forward(self, x):
@@ -45,15 +46,16 @@ class Bottleneck(nn.Module):
 
         return out
 
+
 class refineNet(nn.Module):
     def __init__(self, lateral_channel, out_shape, num_class):
         super(refineNet, self).__init__()
         cascade = []
         num_cascade = 4
         for i in range(num_cascade):
-            cascade.append(self._make_layer(lateral_channel, num_cascade-i-1, out_shape))
+            cascade.append(self._make_layer(lateral_channel, num_cascade - i - 1, out_shape))
         self.cascade = nn.ModuleList(cascade)
-        self.final_predict = self._predict(4*lateral_channel, num_class)
+        self.final_predict = self._predict(4 * lateral_channel, num_class)
 
     def _make_layer(self, input_channel, num, output_shape):
         layers = []
@@ -66,7 +68,7 @@ class refineNet(nn.Module):
         layers = []
         layers.append(Bottleneck(input_channel, 128))
         layers.append(nn.Conv2d(256, num_class,
-            kernel_size=3, stride=1, padding=1, bias=False))
+                                kernel_size=3, stride=1, padding=1, bias=False))
         layers.append(nn.BatchNorm2d(num_class))
         return nn.Sequential(*layers)
 

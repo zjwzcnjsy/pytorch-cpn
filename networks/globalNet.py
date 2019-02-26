@@ -2,6 +2,7 @@ import torch.nn as nn
 import torch
 import math
 
+
 class globalNet(nn.Module):
     def __init__(self, channel_settings, output_shape, num_class):
         super(globalNet, self).__init__()
@@ -29,7 +30,7 @@ class globalNet(nn.Module):
     def _lateral(self, input_size):
         layers = []
         layers.append(nn.Conv2d(input_size, 256,
-            kernel_size=1, stride=1, bias=False))
+                                kernel_size=1, stride=1, bias=False))
         layers.append(nn.BatchNorm2d(256))
         layers.append(nn.ReLU(inplace=True))
 
@@ -39,7 +40,7 @@ class globalNet(nn.Module):
         layers = []
         layers.append(torch.nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True))
         layers.append(torch.nn.Conv2d(256, 256,
-            kernel_size=1, stride=1, bias=False))
+                                      kernel_size=1, stride=1, bias=False))
         layers.append(nn.BatchNorm2d(256))
 
         return nn.Sequential(*layers)
@@ -47,12 +48,12 @@ class globalNet(nn.Module):
     def _predict(self, output_shape, num_class):
         layers = []
         layers.append(nn.Conv2d(256, 256,
-            kernel_size=1, stride=1, bias=False))
+                                kernel_size=1, stride=1, bias=False))
         layers.append(nn.BatchNorm2d(256))
         layers.append(nn.ReLU(inplace=True))
 
         layers.append(nn.Conv2d(256, num_class,
-            kernel_size=3, stride=1, padding=1, bias=False))
+                                kernel_size=3, stride=1, padding=1, bias=False))
         layers.append(nn.Upsample(size=output_shape, mode='bilinear', align_corners=True))
         layers.append(nn.BatchNorm2d(num_class))
 
