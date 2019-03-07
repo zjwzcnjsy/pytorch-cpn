@@ -124,8 +124,8 @@ def train(train_loader, model, optimizer, lr):
         global_loss_record = 0.
         # comput global loss and refine loss
         for global_output, label in zip(global_outputs, targets):
-            # global_label = label * (valid > 0).float().view(-1, num_points, 1, 1)
-            global_loss = F.mse_loss(global_output, label.cuda())
+            global_label = label * (valid > 1.1).float().view(-1, num_points, 1, 1)
+            global_loss = F.mse_loss(global_output, label.cuda()) / 2.
             if loss is None:
                 loss = global_loss
             else:
@@ -133,7 +133,7 @@ def train(train_loader, model, optimizer, lr):
             global_loss_record += global_loss.item()
         refine_loss = F.mse_loss(refine_output, refine_target_var, reduction='none')
         refine_loss = refine_loss.mean(dim=3).mean(dim=2)
-        refine_loss *= (valid_var > 0).float().view(-1, num_points)
+        refine_loss *= (valid_var > 0.1).float().view(-1, num_points)
         refine_loss = ohkm(refine_loss, 8)
         loss += refine_loss
         refine_loss_record = refine_loss.item()
